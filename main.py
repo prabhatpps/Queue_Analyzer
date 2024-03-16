@@ -111,29 +111,13 @@ while cap.isOpened():
 # Save frames to output video using imageio
 imageio.mimwrite(output_video_path, frames_for_output, fps=fps)
 
-for person in people_enter_queue:
-    # Get timestamp
-    exit = frame_count
-
-    # Get first timestamp
-    start = people_enter_queue.get(person)
-
-    time_spent = (exit - int(start)) / fps
-    print("time spent ", time_spent, "by person", person)
-
-    timespent.append(time_spent)
-
-    # Write string to the file
-    csv_writer.writerow(["Time spent by person " + str(person) + " in line is " + str(time_spent)])
-
+# Calculate average time spent in the queue
+if timespent:
     average = sum(timespent) / len(timespent)
-
     print("Average of list: ", round(average, 3))
 
+    # Write average time spent to the CSV file
     csv_writer.writerow(["Average time spent in line is " + str(round(average, 3))])
-
-    # Break the loop if the end of the video is reached
-    break
 
 # Release the video capture object, release the output video, and close the display window
 cap.release()
