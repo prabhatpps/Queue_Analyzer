@@ -9,7 +9,7 @@ import imageio
 model = YOLO('yolov8n.pt')
 
 # Open the video file
-video_path = "Videos/IMG_3804.MOV"
+video_path = "Videos/sample_video2.MOV"
 cap = cv2.VideoCapture(video_path)
 
 fps = 29.98
