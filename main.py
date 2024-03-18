@@ -39,6 +39,9 @@ csv_writer = csv.writer(csv_file)  # Create a CSV writer object to write data to
 # Initialize frame count
 frame_count = 0  # Initialize frame count to keep track of the number of frames processed
 
+# Initialize empty ids list
+person_ids_present_in_video = []
+
 # Get dimensions of the input video
 video_width = int(video_capture.get(cv2.CAP_PROP_FRAME_WIDTH))  # Width of the input video frame
 video_height = int(video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT))  # Height of the input video frame
@@ -79,7 +82,7 @@ while video_capture.isOpened():  # Iterate until the video ends or there are no 
                 # Draw rectangle around the detected person
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
                 cv2.putText(frame, "Person ID: " + str(track_id), (x1, y1 - 5),
-                            cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (20, 255, 0), 2)
+                            cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (20, 0, 255), 2)
                 # Annotate the frame with bounding box and person ID
 
             else:  # If the person exits the ROI
@@ -95,6 +98,7 @@ while video_capture.isOpened():  # Iterate until the video ends or there are no 
                     # Write time spent by the person to the CSV file
                     csv_writer.writerow(
                         ["Time spent by person " + str(track_id) + " in line is " + str(time_spent)])
+                    person_ids_present_in_video.append(str(track_id))
 
                     # Remove entry from the dictionary
                     people_entry_timestamps.pop(str(track_id))
@@ -111,6 +115,14 @@ while video_capture.isOpened():  # Iterate until the video ends or there are no 
 
     else:  # If there are no more frames in the video
         break  # Break the loop
+
+# Calculate average time spent in the queue
+if time_spent_in_queue:
+    average = sum(time_spent_in_queue) / len(set(person_ids_present_in_video))
+    print("Average of list: ", round(average, 3))
+
+    # Write average time spent to the CSV file
+    csv_writer.writerow(["Average time spent in line is " + str(round(average, 3))])
 
 # Release video capture, output video, and CSV file resources
 video_capture.release()  # Release the video capture object
