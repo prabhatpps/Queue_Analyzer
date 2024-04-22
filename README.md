@@ -47,10 +47,6 @@ And here's the Configuration section with details on configuring parameters:
 
 Contributions are welcome! Please fork the repository and submit a pull request with your enhancements.
 
-## License
-
-This project is licensed under the MIT License.
-
 ## Acknowledgements
 
 - YOLOv8 object detection model by Ultralytics: [Link](https://github.com/ultralytics/yolov5)
